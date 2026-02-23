@@ -1,0 +1,14 @@
+{
+    "files.exclude": {
+        ".vscode": true,
+        ".gitattributes": true,
+        ".gitignore": true,
+        "LICENSE": true,
+        "dependancies": true,
+        "README.md":true
+    },
+
+    "workbench.editor.closeEmptyGroups": false,
+    "workbench.editor.enablePreview": false,
+    "workbench.editor.enablePreviewFromQuickOpen": false
+}
