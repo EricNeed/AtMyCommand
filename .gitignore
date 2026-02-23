@@ -1,0 +1,14 @@
+
+# VS code
+.vscode/c_cpp_properties.json
+
+# cmake
+build/Makefile
+build/*.json
+build/*.cmake
+build/.cmake/
+build/CMakeFiles/
+build/CMakeCache.txt
+
+# built files
+build/*.exe
