@@ -1,0 +1,320 @@
+{
+	"inputs" : 
+	[
+		{
+			"path" : "CMakeLists.txt"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/CMakeFiles/4.2.0-rc2/CMakeSystem.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/CMakeSystemSpecificInitialize.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Windows-Initialize.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/CMakeFiles/4.2.0-rc2/CMakeCCompiler.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/CMakeFiles/4.2.0-rc2/CMakeCXXCompiler.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/CMakeSystemSpecificInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/CMakeGenericSystem.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/CMakeInitializeConfigs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Windows.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/WindowsPaths.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/CMakeCInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/CMakeLanguageInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Compiler/GNU-C.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Compiler/GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Windows-GNU-C.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Windows-GNU.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/CMakeFiles/4.2.0-rc2/CMakeRCCompiler.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/CMakeRCInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Windows-windres.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Windows-GNU-C-ABI.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/CMakeCommonLanguageInclude.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Internal/CMakeCLinkerInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Internal/CMakeCommonLinkerInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Linker/GNU-C.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Linker/GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Linker/Windows-GNU-C.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Linker/Windows-GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Linker/GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/CMakeCXXInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/CMakeLanguageInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Compiler/GNU-CXX.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Compiler/GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Windows-GNU-CXX.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Windows-GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Windows-GNU-CXX-ABI.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/CMakeCommonLanguageInclude.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Internal/CMakeCXXLinkerInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Internal/CMakeCommonLinkerInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Linker/GNU-CXX.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Linker/GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Linker/Windows-GNU-CXX.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/Platform/Linker/Windows-GNU.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/SDL3-devel-3.4.0-VC/SDL3-3.4.0/cmake/SDL3ConfigVersion.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/SDL3-devel-3.4.0-VC/SDL3-3.4.0/cmake/sdlcpu.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/SDL3-devel-3.4.0-VC/SDL3-3.4.0/cmake/SDL3Config.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/FeatureSummary.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/SDL3_image-devel-3.4.0-VC/SDL3_image-3.4.0/cmake/SDL3_imageConfigVersion.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/SDL3_image-devel-3.4.0-VC/SDL3_image-3.4.0/cmake/sdlcpu.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/SDL3_image-devel-3.4.0-VC/SDL3_image-3.4.0/cmake/SDL3_imageConfig.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/FeatureSummary.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/shader_cross_libs/shadercross_built/lib/cmake/SDL3_shadercross/SDL3_shadercrossConfigVersion.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/shader_cross_libs/shadercross_built/lib/cmake/SDL3_shadercross/SDL3_shadercrossConfig.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/FeatureSummary.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/CMakeFindDependencyMacro.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/shader_cross_libs/SPIRV_Cross_built/share/spirv_cross_c_shared/cmake/spirv_cross_c_sharedConfig.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/shader_cross_libs/SPIRV_Cross_built/share/spirv_cross_c_shared/cmake/spirv_cross_c_sharedConfig-noconfig.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/shader_cross_libs/shadercross_built/lib/cmake/SDL3_shadercross/sdlcpu.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/shader_cross_libs/shadercross_built/lib/cmake/SDL3_shadercross/FindDirectXShaderCompiler.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/FindPackageHandleStandardArgs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/FindPackageMessage.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/shader_cross_libs/shadercross_built/lib/cmake/SDL3_shadercross/SDL3_shadercross-static-targets.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/shader_cross_libs/shadercross_built/lib/cmake/SDL3_shadercross/SDL3_shadercross-static-targets-release.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/Code/C++/Library/shader_cross_libs/SPIRV_Cross_built/share/spirv_cross_c_shared/cmake/spirv_cross_c_sharedConfig.cmake"
+		}
+	],
+	"kind" : "cmakeFiles",
+	"paths" : 
+	{
+		"build" : "D:/Code/C++/project/Game_Test/build",
+		"source" : "D:/Code/C++/project/Game_Test"
+	},
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 1
+	}
+}

@@ -1,0 +1,3 @@
+D:\Code\cmake\cmake-4.2.0-rc2-windows-x86_64\bin\cmake.exe -E rm -f CMakeFiles\Officers_Charge.dir/objects.a
+"D:\Program Files\Compilers\MinGW\ucrt64\bin\ar.exe" qc CMakeFiles\Officers_Charge.dir/objects.a @CMakeFiles\Officers_Charge.dir\objects1.rsp
+"D:\Program Files\Compilers\MinGW\ucrt64\bin\g++.exe" -g -Wl,--whole-archive CMakeFiles\Officers_Charge.dir/objects.a -Wl,--no-whole-archive -o Officers_Charge.exe -Wl,--out-implib,libOfficers_Charge.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\Officers_Charge.dir\linkLibs.rsp

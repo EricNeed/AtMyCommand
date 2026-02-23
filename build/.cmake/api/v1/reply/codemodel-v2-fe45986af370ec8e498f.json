@@ -1,0 +1,141 @@
+{
+	"configurations" : 
+	[
+		{
+			"abstractTargets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "DirectXShaderCompiler::dxcompiler::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-DirectXShaderCompiler__dxcompiler-Debug-882dcee7e6e6738e47da.json",
+					"name" : "DirectXShaderCompiler::dxcompiler",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "DirectXShaderCompiler::dxil::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-DirectXShaderCompiler__dxil-Debug-acf37e67c227a40803ff.json",
+					"name" : "DirectXShaderCompiler::dxil",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SDL3::Headers::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SDL3__Headers-Debug-813e3f052b89e426ad50.json",
+					"name" : "SDL3::Headers",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SDL3::SDL3-shared::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SDL3__SDL3-shared-Debug-f894ece895aaa626dbfd.json",
+					"name" : "SDL3::SDL3-shared",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SDL3::SDL3_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SDL3__SDL3_test-Debug-093a844aff466202ed5e.json",
+					"name" : "SDL3::SDL3_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SDL3_image::SDL3_image-shared::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SDL3_image__SDL3_image-shared-Debug-9a11e22b1ab7c34464e3.json",
+					"name" : "SDL3_image::SDL3_image-shared",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SDL3_shadercross::SDL3_shadercross-static::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SDL3_shadercross__SDL3_shadercross-static-Debug-991d1c24ee78a5759e90.json",
+					"name" : "SDL3_shadercross::SDL3_shadercross-static",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "spirv-cross-c-shared::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-spirv-cross-c-shared-Debug-cf023a6303ce5ae98b77.json",
+					"name" : "spirv-cross-c-shared",
+					"projectIndex" : 0
+				}
+			],
+			"directories" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					],
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f6f22219c74102c3da70.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "AtMyCommand",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "AtMyCommand::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-AtMyCommand-Debug-ee4361aa2fcda91dbf22.json",
+					"name" : "AtMyCommand",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "D:/Code/C++/project/Game_Test/build",
+		"source" : "D:/Code/C++/project/Game_Test"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	}
+}

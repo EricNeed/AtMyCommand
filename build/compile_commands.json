@@ -1,0 +1,14 @@
+[
+{
+  "directory": "D:/Code/C++/project/Game_Test/build",
+  "command": "\"D:\\Program Files\\Compilers\\MinGW\\ucrt64\\bin\\g++.exe\"  @CMakeFiles/AtMyCommand.dir/includes_CXX.rsp -g -o CMakeFiles\\AtMyCommand.dir\\src\\main.cpp.obj -c D:\\Code\\C++\\project\\Game_Test\\src\\main.cpp",
+  "file": "D:/Code/C++/project/Game_Test/src/main.cpp",
+  "output": "CMakeFiles/AtMyCommand.dir/src/main.cpp.obj"
+},
+{
+  "directory": "D:/Code/C++/project/Game_Test/build",
+  "command": "\"D:\\Program Files\\Compilers\\MinGW\\ucrt64\\bin\\g++.exe\"  @CMakeFiles/AtMyCommand.dir/includes_CXX.rsp -g -o CMakeFiles\\AtMyCommand.dir\\src\\client\\rendering.cpp.obj -c D:\\Code\\C++\\project\\Game_Test\\src\\client\\rendering.cpp",
+  "file": "D:/Code/C++/project/Game_Test/src/client/rendering.cpp",
+  "output": "CMakeFiles/AtMyCommand.dir/src/client/rendering.cpp.obj"
+}
+]

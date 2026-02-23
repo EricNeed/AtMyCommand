@@ -1,0 +1,91 @@
+{
+	"abstract" : true,
+	"artifacts" : 
+	[
+		{
+			"path" : "D:/Code/C++/Library/shader_cross_libs/SPIRV_Cross_built/bin/libspirv-cross-c-shared.dll"
+		},
+		{
+			"path" : "D:/Code/C++/Library/shader_cross_libs/SPIRV_Cross_built/lib/libspirv-cross-c-shared.dll.a"
+		}
+	],
+	"backtrace" : 7,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"find_package",
+			"__find_dependency_common",
+			"find_dependency"
+		],
+		"files" : 
+		[
+			"D:/Code/C++/Library/shader_cross_libs/SPIRV_Cross_built/share/spirv_cross_c_shared/cmake/spirv_cross_c_sharedConfig.cmake",
+			"D:/Code/cmake/cmake-4.2.0-rc2-windows-x86_64/share/cmake-4.2/Modules/CMakeFindDependencyMacro.cmake",
+			"D:/Code/C++/Library/shader_cross_libs/shadercross_built/lib/cmake/SDL3_shadercross/SDL3_shadercrossConfig.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 3
+			},
+			{
+				"command" : 1,
+				"file" : 3,
+				"line" : 21,
+				"parent" : 0
+			},
+			{
+				"file" : 2,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 52,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 125,
+				"parent" : 3
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 93,
+				"parent" : 4
+			},
+			{
+				"file" : 0,
+				"parent" : 5
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 59,
+				"parent" : 6
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	},
+	"id" : "spirv-cross-c-shared::@6890427a1f51a3e7e1df",
+	"imported" : true,
+	"local" : true,
+	"name" : "spirv-cross-c-shared",
+	"nameOnDisk" : "libspirv-cross-c-shared.dll",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sources" : [],
+	"type" : "SHARED_LIBRARY"
+}
