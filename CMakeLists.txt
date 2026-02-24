@@ -3,12 +3,25 @@ project("AtMyCommand" VERSION 0.1.0 LANGUAGES C CXX)
 
 add_executable(AtMyCommand ${CMAKE_SOURCE_DIR}\\src\\main.cpp)
 
+#load the local config, if have one
+if(EXISTS ${CMAKE_SOURCE_DIR}/local_config.cmake)
+    message("local config file found")
+    include(${CMAKE_SOURCE_DIR}/local_config.cmake)
+endif()
 
 #change these to your local library location
-set(SDL_DIR "D:\\Code\\C++\\Library\\SDL3-devel-3.4.0-VC\\SDL3-3.4.0\\cmake")
-set(SDL_Image_DIR "D:\\Code\\C++\\Library\\SDL3_image-devel-3.4.0-VC\\SDL3_image-3.4.0\\cmake")
-set(SDL3_shadercross_DIR "D:\\Code\\C++\\Library\\shader_cross_libs\\shadercross_built\\lib\\cmake\\SDL3_shadercross")
-set(spirv_cross_c_shared_DIR "D:\\Code\\C++\\Library\\shader_cross_libs\\SPIRV_Cross_built\\share\\spirv_cross_c_shared\\cmake")
+if(NOT DEFINED SDL_DIR)
+    set(SDL_DIR "D:\\Code\\C++\\Library\\SDL3-devel-3.4.0-VC\\SDL3-3.4.0\\cmake") 
+endif()
+if(NOT DEFINED SDL_Image_DIR) 
+    set(SDL_Image_DIR "D:\\Code\\C++\\Library\\SDL3_image-devel-3.4.0-VC\\SDL3_image-3.4.0\\cmake") 
+endif()
+if(NOT DEFINED SDL3_shadercross_DIR)
+    set(SDL3_shadercross_DIR "D:\\Code\\C++\\Library\\shader_cross_libs\\shadercross_built\\lib\\cmake\\SDL3_shadercross")
+endif()
+if(NOT DEFINED spirv_cross_c_shared_DIR) 
+    set(spirv_cross_c_shared_DIR "D:\\Code\\C++\\Library\\shader_cross_libs\\SPIRV_Cross_built\\share\\spirv_cross_c_shared\\cmake") 
+endif()
 
 #no need for configure(inside of project)
 set(DirectXShaderCompiler_dxcompiler_BINARY ${CMAKE_SOURCE_DIR}/dependancies/dxcompiler.dll)

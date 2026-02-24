@@ -9,6 +9,7 @@ build/*.cmake
 build/.cmake/
 build/CMakeFiles/
 build/CMakeCache.txt
+local_config.cmake
 
 # built files
 build/*.exe

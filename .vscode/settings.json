@@ -6,7 +6,9 @@
         "LICENSE": true,
         "dependancies": true,
         "README.md":true,
-        "trash_bin":true
+        "trash_bin":true,
+        "local_config_template.cmake":true,
+        "local_config.cmake":true
     },
 
     "workbench.editor.closeEmptyGroups": false,
