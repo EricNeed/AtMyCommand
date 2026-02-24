@@ -1,3 +1,0 @@
-D:\Code\cmake\cmake-4.2.0-rc2-windows-x86_64\bin\cmake.exe -E rm -f CMakeFiles\AtMyCommand.dir/objects.a
-"D:\Program Files\Compilers\MinGW\ucrt64\bin\ar.exe" qc CMakeFiles\AtMyCommand.dir/objects.a @CMakeFiles\AtMyCommand.dir\objects1.rsp
-"D:\Program Files\Compilers\MinGW\ucrt64\bin\g++.exe" -g -Wl,--whole-archive CMakeFiles\AtMyCommand.dir/objects.a -Wl,--no-whole-archive -o AtMyCommand.exe -Wl,--out-implib,libAtMyCommand.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\AtMyCommand.dir\linkLibs.rsp

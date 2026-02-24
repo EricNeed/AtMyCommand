@@ -1,3 +1,0 @@
-D:/Code/C++/project/Game_Test/build/CMakeFiles/AtMyCommand.dir
-D:/Code/C++/project/Game_Test/build/CMakeFiles/edit_cache.dir
-D:/Code/C++/project/Game_Test/build/CMakeFiles/rebuild_cache.dir
