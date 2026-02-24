@@ -5,7 +5,8 @@
         ".gitignore": true,
         "LICENSE": true,
         "dependancies": true,
-        "README.md":true
+        "README.md":true,
+        "trash_bin":true
     },
 
     "workbench.editor.closeEmptyGroups": false,
