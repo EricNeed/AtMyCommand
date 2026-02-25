@@ -22,7 +22,7 @@ if(NOT DEFINED SDL_Image_DIR)
 endif()
 if(NOT DEFINED SDL3_shadercross_DIR)
     set(SDL3_shadercross_DIR "${CMAKE_SOURCE_DIR}\\dependancies\\libraries\\shadercross_built\\lib\\cmake\\SDL3_shadercross")
-    set(spirv_cross_c_shared_DIR "${CMAKE_SOURCE_DIR}\\dependancies\\SPIRV_Cross_built\\share\\spirv_cross_c_shared\\cmake")
+    set(spirv_cross_c_shared_DIR "${CMAKE_SOURCE_DIR}\\dependancies\\libraries\\SPIRV_Cross_built\\share\\spirv_cross_c_shared\\cmake")
 endif()
 
 

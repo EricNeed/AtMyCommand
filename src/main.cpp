@@ -33,6 +33,7 @@ int main(){
     SDL_Window* sdl_window = SDL_CreateWindow("AtMyCommand", 960, 540, SDL_WINDOW_RESIZABLE);
     SDL_GPUDevice* sdl_gpu_device = SDL_CreateGPUDevice(supported_formats, NULL, NULL);
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "GPU Backend is: %s", SDL_GetGPUDeviceDriver(sdl_gpu_device));
+    SDL_ClaimWindowForGPUDevice(sdl_gpu_device, sdl_window);
 
 
     while(game_running){
