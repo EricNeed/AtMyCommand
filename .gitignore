@@ -16,6 +16,7 @@ build/*.exe
 
 # libraries
 dependancies/libraries
+build/Shader_Libs-prefix
 
 #files i don't want to throw away
 trash_bin/
