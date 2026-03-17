@@ -6,7 +6,7 @@ struct InputVSH{
 struct OutputVSH{
     float4 Position : SV_Position;
 };
-Output mainVSH(Input input) {
+Output mainVSH(InputVSH input) {
     Output output;
     output.Position = float4(input.x, input.y, input.z, 1.0f);
     return output;
@@ -16,7 +16,8 @@ Output mainVSH(Input input) {
 struct OutputVSH{
     float4 Color : SV_Target0;
 };
-Output mainVSH(){
+
+Output mainFSH(){
     Output output;
     output.Color = float4(1.0f, 0.0f, 0.0f, 1.0f); // Red
     return output;

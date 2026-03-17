@@ -12,7 +12,8 @@ class ClientRendering{
             SDL_GPU_SHADERFORMAT_METALLIB  
         );
         SDL_Window* sdl_window = SDL_CreateWindow("AtMyCommand", 960, 540, SDL_WINDOW_RESIZABLE);
-        SDL_GPUDevice* sdl_gpu_device = SDL_CreateGPUDevice(supported_formats, NULL, NULL);
+        //SDL_GPUDevice* sdl_gpu_device = SDL_CreateGPUDevice(supported_formats, NULL, NULL);
+        SDL_GPUDevice* sdl_gpu_device = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_DXIL, NULL, NULL);
 
 
         ClientRendering();
