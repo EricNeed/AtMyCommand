@@ -18,8 +18,4 @@ ClientRendering& ClientRendering::GetOnlyInstance(){
 }
 
 void ClientRendering::tickRendering(){
-    static SDL_GPUShaderCreateInfo info = {
-
-    };
-    static SDL_GPUShader* shader_script = SDL_CreateGPUShader(sdl_gpu_device, );
 }
