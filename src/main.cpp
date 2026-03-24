@@ -33,9 +33,12 @@ int main(){
 
 
     pipeline_info.target_info.num_color_targets = 1;
-    pipeline_info.target_info.color_target_descriptions = (SDL_GPUColorTargetDescription[]){{
+
+    SDL_GPUColorTargetDescription color_target_desc = {
         .format = SDL_GetGPUSwapchainTextureFormat(sdl_gpu_device, sdl_window)
-    }};
+    };
+
+    pipeline_info.target_info.color_target_descriptions = &color_target_desc;
     pipeline_info.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
 
     size_t vsh_size;

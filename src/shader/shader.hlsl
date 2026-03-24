@@ -6,7 +6,7 @@ struct InputVSH{
 struct OutputVSH{
     float4 Position : SV_Position;
 };
-OutputFSH mainVSH(InputVSH input) {
+OutputFSH mainVSH() {
     OutputFSH output;
     output.Position = float4(input.x, input.y, input.z, 1.0f);
     return output;
