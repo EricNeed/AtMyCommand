@@ -1,6 +1,5 @@
 #include<SDL3/SDL.h>
 #include"src/client/client_main.h"
-#include<SDL3_shadercross/SDL_shadercross.h>
 
 SDL_Window* sdl_window = SDL_CreateWindow("AtMyCommand", 960, 540, SDL_WINDOW_RESIZABLE);
 SDL_GPUDevice* sdl_gpu_device = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_DXIL, NULL, NULL);
@@ -41,8 +40,11 @@ int main(){
     pipeline_info.target_info.color_target_descriptions = &color_target_desc;
     pipeline_info.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
 
+
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Prepare vertex shader file");
+
     size_t vsh_size;
-    Uint8 *vsh_code = (Uint8 *)SDL_LoadFile("Shader/shader.dxil", &vsh_size);
+    Uint8 *vsh_code = (Uint8 *)SDL_LoadFile("shader/shader.vert.dxil", &vsh_size);
 
     SDL_GPUShaderCreateInfo vsh_info = {
         .code_size = vsh_size,
@@ -57,8 +59,10 @@ int main(){
         .props = 0                           // 0 if no extensions
     };
 
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Prepare fragment shader file");
+
     size_t fsh_size;
-    Uint8 *fsh_code = (Uint8 *)SDL_LoadFile("Shader/shader.dxil", &fsh_size);
+    Uint8 *fsh_code = (Uint8 *)SDL_LoadFile("Shader/shader.frag.dxil", &fsh_size);
 
     SDL_GPUShaderCreateInfo fsh_info = {
         .code_size = fsh_size,
@@ -78,6 +82,7 @@ int main(){
 
     SDL_GPUGraphicsPipeline* pipeline = SDL_CreateGPUGraphicsPipeline(sdl_gpu_device, &pipeline_info);
 
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Game loop begin");
 
     while(game_running){
         
@@ -101,6 +106,7 @@ int main(){
         processSDLEvents();
     }
 
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Clean up instances");
     SDL_ReleaseGPUGraphicsPipeline(sdl_gpu_device, pipeline);
     SDL_DestroyWindow(sdl_window);
     SDL_Quit();
