@@ -15,7 +15,7 @@ local_config.cmake
 build/*.exe
 
 # libraries
-dependancies/libraries
+dependancies/
 build/Shader_Libs-prefix
 
 #files i don't want to throw away

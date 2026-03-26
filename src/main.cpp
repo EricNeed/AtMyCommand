@@ -82,6 +82,44 @@ int main(){
 
     SDL_GPUGraphicsPipeline* pipeline = SDL_CreateGPUGraphicsPipeline(sdl_gpu_device, &pipeline_info);
 
+    float triangle_vertices[9] = {
+        -0.5f, -0.5f, 0.0f,  // Bottom-left
+        0.5f, -0.5f, 0.0f,  // Bottom-right
+        0.0f,  0.5f, 0.0f   // Top
+    };
+
+    SDL_GPUBufferCreateInfo triangle_vert_info{
+        .usage = SDL_GPU_BUFFERUSAGE_VERTEX,
+        .size = sizeof(triangle_vert_info),
+        .props = 0,
+    };
+
+    SDL_GPUBuffer* verticie_buffer = SDL_CreateGPUBuffer(sdl_gpu_device, &triangle_vert_info);
+
+    SDL_GPUTransferBufferCreateInfo transfer_info{
+        .usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
+        .size = sizeof(triangle_vert_info),
+        .props = 0,
+    };
+
+    SDL_GPUTransferBuffer* transfer_bufer = SDL_CreateGPUTransferBuffer(sdl_gpu_device, &transfer_info);
+    SDL_GPUTransferBufferLocation transfer_location{
+        .transfer_buffer = transfer_bufer,
+        .offset = 0,
+    };
+
+    SDL_GPUBufferRegion buffer_reigion{
+        .buffer = verticie_buffer,
+        .offset = 0,
+        .size = 36,
+    };
+
+    SDL_GPUCommandBuffer* upload_cmd = SDL_AcquireGPUCommandBuffer(sdl_gpu_device);
+    SDL_GPUCopyPass* copy_pass = SDL_BeginGPUCopyPass(upload_cmd);
+    SDL_UploadToGPUBuffer(copy_pass, &transfer_location, 0, triangle_vertices);
+    SDL_EndGPUCopyPass(copy_pass);
+    SDL_SubmitGPUCommandBuffer(upload_cmd);
+
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Game loop begin");
 
     while(game_running){

@@ -10,7 +10,7 @@ function(compileShader SHADER_SOURCE OUTPUT_EXTENSION RENDER_STAGE ENTRY_FUNCTIO
     #the command line function
     add_custom_command(
         OUTPUT ${OUTPUT_FILE_DIR}
-        COMMAND "D:\\Code\\C++\\Library\\shader_cross_libs\\shadercross_bundle\\bin\\shadercross.exe" ${SHADER_SOURCE}
+        COMMAND ${Shadercross_DIR} ${SHADER_SOURCE}
         -o ${OUTPUT_FILE_DIR}
         -t ${RENDER_STAGE}
         -e ${ENTRY_FUNCTION}
