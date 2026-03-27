@@ -31,14 +31,10 @@ int main(){
     SDL_ClaimWindowForGPUDevice(sdl_gpu_device, sdl_window);
 
 
-    pipeline_info.target_info.num_color_targets = 1;
-
     SDL_GPUColorTargetDescription color_target_desc = {
         .format = SDL_GetGPUSwapchainTextureFormat(sdl_gpu_device, sdl_window)
     };
 
-    pipeline_info.target_info.color_target_descriptions = &color_target_desc;
-    pipeline_info.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
 
 
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Prepare vertex shader file");
@@ -77,28 +73,74 @@ int main(){
         .props = 0                           // 0 if no extensions
     };
 
-    pipeline_info.vertex_shader = SDL_CreateGPUShader(sdl_gpu_device, &vsh_info);
-    pipeline_info.fragment_shader = SDL_CreateGPUShader(sdl_gpu_device, &fsh_info);
 
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Assembling gpu create info");
+
+    SDL_GPUGraphicsPipelineCreateInfo;
+
+    SDL_GPUVertexBufferDescription vert_buffer_disc{0, 12, SDL_GPU_VERTEXINPUTRATE_VERTEX};
+
+    SDL_GPUVertexAttribute vertex_attrs[3] = {{
+        // Attribute 0: X coordinate (TEXCOORD0 in shader)
+        .location = 0,           // Matches shader: layout(location=0) in float x;
+        .buffer_slot = 0,        // From vertex buffer slot 0
+        .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT, // Single float (4 bytes)
+        .offset = 0              // Starts at byte 0 in vertex
+    },
+    {
+        // Attribute 1: Y coordinate (TEXCOORD1 in shader)  
+        .location = 1,           // layout(location=1) in float y;
+        .buffer_slot = 0,        // Same buffer slot 0
+        .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT, // Single float
+        .offset = 4              // After X (byte 4)
+    },
+    {
+        // Attribute 2: Z coordinate (TEXCOORD2 in shader)
+        .location = 2,           // layout(location=2) in float z;
+        .buffer_slot = 0,        // Same buffer slot 0  
+        .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT, // Single float
+        .offset = 8              // After X+Y (byte 8)
+    }};
+
+    SDL_GPUVertexInputState pipeline_input_state{
+        .vertex_buffer_descriptions = &vert_buffer_disc,
+        .num_vertex_buffers = 1,
+        .vertex_attributes = vertex_attrs,
+        .num_vertex_attributes = 3,
+    };
+
+    pipeline_info = {
+        .vertex_shader = SDL_CreateGPUShader(sdl_gpu_device, &vsh_info),
+        .fragment_shader = SDL_CreateGPUShader(sdl_gpu_device, &fsh_info),
+        .vertex_input_state = pipeline_input_state,
+        .primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST,
+        .target_info = {&color_target_desc, 1, SDL_GPU_TEXTUREFORMAT_D16_UNORM, false}
+    };
+    
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Creating gpu pipeline");
     SDL_GPUGraphicsPipeline* pipeline = SDL_CreateGPUGraphicsPipeline(sdl_gpu_device, &pipeline_info);
 
-    float triangle_vertices[9] = {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Prepare drawing verticies (constant for now)");
+    const float triangle_vertices[9] = {
         -0.5f, -0.5f, 0.0f,  // Bottom-left
         0.5f, -0.5f, 0.0f,  // Bottom-right
         0.0f,  0.5f, 0.0f   // Top
     };
-
+    
+    
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "create gpu buffer");
     SDL_GPUBufferCreateInfo triangle_vert_info{
         .usage = SDL_GPU_BUFFERUSAGE_VERTEX,
-        .size = sizeof(triangle_vert_info),
+        .size = 36,
         .props = 0,
     };
-
+    
     SDL_GPUBuffer* verticie_buffer = SDL_CreateGPUBuffer(sdl_gpu_device, &triangle_vert_info);
 
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "create transfer buffer");
     SDL_GPUTransferBufferCreateInfo transfer_info{
         .usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
-        .size = sizeof(triangle_vert_info),
+        .size = 36,
         .props = 0,
     };
 
@@ -114,6 +156,7 @@ int main(){
         .size = 36,
     };
 
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "upload transfer buffer");
     SDL_GPUCommandBuffer* upload_cmd = SDL_AcquireGPUCommandBuffer(sdl_gpu_device);
     SDL_GPUCopyPass* copy_pass = SDL_BeginGPUCopyPass(upload_cmd);
     SDL_UploadToGPUBuffer(copy_pass, &transfer_location, 0, triangle_vertices);
@@ -133,6 +176,13 @@ int main(){
             
             SDL_BindGPUGraphicsPipeline(renderPass, pipeline);
             
+            SDL_GPUBufferBinding buffer_bind{
+                .buffer = verticie_buffer, 
+                .offset = 0 
+            };
+
+            SDL_BindGPUVertexBuffers(renderPass, 0, &buffer_bind, 1);
+
             // Draw 3 vertices (1 triangle)
             SDL_DrawGPUPrimitives(renderPass, 3, 1, 0, 0);
             
