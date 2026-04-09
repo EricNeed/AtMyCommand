@@ -4,10 +4,20 @@
 SDL_Window* sdl_window = SDL_CreateWindow("AtMyCommand", 960, 540, SDL_WINDOW_RESIZABLE);
 SDL_GPUDevice* sdl_gpu_device = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_DXIL, NULL, NULL);
 
-struct Vertex{
-    float x, y, z, r, g, b, s;
-};
 
+// the vertex input layout, (0,0):center, (-1,-1)bottom left, (1, 1)top right
+struct Vertex
+{
+    float x, y, z;      //vec3 position
+    float r, g, b, a;   //vec4 color
+};
+// a list of vertices
+static Vertex vertices[]
+{
+    {0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f},     // top vertex
+    {-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f},   // bottom left vertex
+    {0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f}     // bottom right vertex
+};
 
 
 bool game_running = true;
@@ -22,7 +32,6 @@ void processSDLEvents(){
     }
 }
 
-SDL_GPUGraphicsPipelineCreateInfo pipeline_info = {};
 
 int main(){
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_AUDIO);
@@ -31,17 +40,10 @@ int main(){
     SDL_ClaimWindowForGPUDevice(sdl_gpu_device, sdl_window);
 
 
-    SDL_GPUColorTargetDescription color_target_desc = {
-        .format = SDL_GetGPUSwapchainTextureFormat(sdl_gpu_device, sdl_window)
-    };
-
-
-
-    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Prepare vertex shader file");
-
+    //SHADER!!!!!!!:(
+    //vertex shader:
     size_t vsh_size;
     Uint8 *vsh_code = (Uint8 *)SDL_LoadFile("shader/shader.vert.dxil", &vsh_size);
-
     SDL_GPUShaderCreateInfo vsh_info = {
         .code_size = vsh_size,
         .code = vsh_code,
@@ -54,12 +56,11 @@ int main(){
         .num_uniform_buffers = 0,            // cbuffer / uniform buffer slots used
         .props = 0                           // 0 if no extensions
     };
+    SDL_GPUShader* vsh_shader = SDL_CreateGPUShader(sdl_gpu_device, &vsh_info);
 
-    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Prepare fragment shader file");
-
+    //fragment shader:
     size_t fsh_size;
     Uint8 *fsh_code = (Uint8 *)SDL_LoadFile("Shader/shader.frag.dxil", &fsh_size);
-
     SDL_GPUShaderCreateInfo fsh_info = {
         .code_size = fsh_size,
         .code = fsh_code,
@@ -72,130 +73,143 @@ int main(){
         .num_uniform_buffers = 0,            // cbuffer / uniform buffer slots used
         .props = 0                           // 0 if no extensions
     };
+    SDL_GPUShader* fsh_shader = SDL_CreateGPUShader(sdl_gpu_device, &fsh_info);
 
 
-    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Assembling gpu create info");
-
-    SDL_GPUGraphicsPipelineCreateInfo;
-
-    SDL_GPUVertexBufferDescription vert_buffer_disc{0, 12, SDL_GPU_VERTEXINPUTRATE_VERTEX};
-
-    SDL_GPUVertexAttribute vertex_attrs[3] = {{
-        // Attribute 0: X coordinate (TEXCOORD0 in shader)
-        .location = 0,           // Matches shader: layout(location=0) in float x;
-        .buffer_slot = 0,        // From vertex buffer slot 0
-        .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT, // Single float (4 bytes)
-        .offset = 0              // Starts at byte 0 in vertex
-    },
-    {
-        // Attribute 1: Y coordinate (TEXCOORD1 in shader)  
-        .location = 1,           // layout(location=1) in float y;
-        .buffer_slot = 0,        // Same buffer slot 0
-        .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT, // Single float
-        .offset = 4              // After X (byte 4)
-    },
-    {
-        // Attribute 2: Z coordinate (TEXCOORD2 in shader)
-        .location = 2,           // layout(location=2) in float z;
-        .buffer_slot = 0,        // Same buffer slot 0  
-        .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT, // Single float
-        .offset = 8              // After X+Y (byte 8)
+    //vertex buffer discriptions
+    SDL_GPUVertexBufferDescription vertexBufferDesctiptions[1]{{
+        .slot = 0,
+        .pitch = sizeof(Vertex),
+        .input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX,
+        .instance_step_rate = 0,
     }};
-
-    SDL_GPUVertexInputState pipeline_input_state{
-        .vertex_buffer_descriptions = &vert_buffer_disc,
-        .num_vertex_buffers = 1,
-        .vertex_attributes = vertex_attrs,
-        .num_vertex_attributes = 3,
+    //vertex attribute
+    SDL_GPUVertexAttribute vertexAttributes[2]{
+        {//position x, y, depth
+            .location = 0,
+            .buffer_slot = 0,
+            .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3,
+            .offset = 0,
+        },
+        {//color r, g, b, a
+            .location = 0,
+            .buffer_slot = 1,
+            .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT4,
+            .offset = sizeof(float) * 3,
+        }
     };
-
-    pipeline_info = {
-        .vertex_shader = SDL_CreateGPUShader(sdl_gpu_device, &vsh_info),
-        .fragment_shader = SDL_CreateGPUShader(sdl_gpu_device, &fsh_info),
-        .vertex_input_state = pipeline_input_state,
+    //color target discription
+    SDL_GPUColorTargetDescription colorTargetDescriptions[1]{{
+        .format = SDL_GetGPUSwapchainTextureFormat(sdl_gpu_device, sdl_window),
+        .blend_state = {
+            .src_color_blendfactor = SDL_GPU_BLENDFACTOR_SRC_ALPHA,
+            .dst_color_blendfactor = SDL_GPU_BLENDFACTOR_ONE_MINUS_SRC_ALPHA,
+            .color_blend_op = SDL_GPU_BLENDOP_ADD,
+            .src_alpha_blendfactor = SDL_GPU_BLENDFACTOR_SRC_ALPHA,
+            .dst_alpha_blendfactor = SDL_GPU_BLENDFACTOR_ONE_MINUS_SRC_ALPHA,
+            .alpha_blend_op = SDL_GPU_BLENDOP_ADD,
+            .enable_blend = true,
+        },
+    }};
+    //pipeline info
+    SDL_GPUGraphicsPipelineCreateInfo pipeline_info{
+        .vertex_shader = vsh_shader,
+        .fragment_shader = fsh_shader,
+        .vertex_input_state = {
+            .vertex_buffer_descriptions = vertexBufferDesctiptions,
+            .num_vertex_buffers = 1,
+            .vertex_attributes = vertexAttributes,
+            .num_vertex_attributes = 2,
+        },
         .primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST,
-        .target_info = {&color_target_desc, 1, SDL_GPU_TEXTUREFORMAT_D16_UNORM, false}
+        .target_info = {
+            .color_target_descriptions = colorTargetDescriptions,
+            .num_color_targets = 1,
+        },
     };
-    
-    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Creating gpu pipeline");
-    SDL_GPUGraphicsPipeline* pipeline = SDL_CreateGPUGraphicsPipeline(sdl_gpu_device, &pipeline_info);
+    SDL_GPUGraphicsPipeline* graphics_pipeline = SDL_CreateGPUGraphicsPipeline(sdl_gpu_device, &pipeline_info);
+    SDL_ReleaseGPUShader(sdl_gpu_device, vsh_shader);//dont need shader no more after create pipeline
+    SDL_ReleaseGPUShader(sdl_gpu_device, fsh_shader);
 
-    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Prepare drawing verticies (constant for now)");
-    const float triangle_vertices[9] = {
-        -0.5f, -0.5f, 0.0f,  // Bottom-left
-        0.5f, -0.5f, 0.0f,  // Bottom-right
-        0.0f,  0.5f, 0.0f   // Top
+
+    //color target
+    SDL_GPUColorTargetInfo gpu_color_target_info = {
+        .clear_color = {1.0, 1.0, 1.0, 1.0},//what color to clear the screen to
+        .load_op = SDL_GPU_LOADOP_CLEAR,// or "SDL_GPU_LOADOP_LOAD" to keep the previous content
+        .store_op = SDL_GPU_STOREOP_STORE,// store the content to the texture
     };
-    
-    
-    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "create gpu buffer");
-    SDL_GPUBufferCreateInfo triangle_vert_info{
+
+    //create a buffer on the gpu
+    SDL_GPUBufferCreateInfo vertex_buffer_info{
         .usage = SDL_GPU_BUFFERUSAGE_VERTEX,
-        .size = 36,
+        .size = sizeof(vertices),//size of the buffer
+        .props = 0,// propertie ID if need extension
+    };
+    SDL_GPUBuffer* vertex_buffer = SDL_CreateGPUBuffer(sdl_gpu_device, &vertex_buffer_info);//very expensive to create, reuse it
+
+    //create a transfer buffer
+    SDL_GPUTransferBufferCreateInfo transfer_buffer_info{
+        .usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD, //this buffer transfer data to the gpu
+        .size = size_t(vertices),
         .props = 0,
     };
-    
-    SDL_GPUBuffer* verticie_buffer = SDL_CreateGPUBuffer(sdl_gpu_device, &triangle_vert_info);
-
-    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "create transfer buffer");
-    SDL_GPUTransferBufferCreateInfo transfer_info{
-        .usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
-        .size = 36,
-        .props = 0,
-    };
-
-    SDL_GPUTransferBuffer* transfer_bufer = SDL_CreateGPUTransferBuffer(sdl_gpu_device, &transfer_info);
+    SDL_GPUTransferBuffer* transfer_buffer = SDL_CreateGPUTransferBuffer(sdl_gpu_device, &transfer_buffer_info);
+    //the passing info about the transfer buffer
     SDL_GPUTransferBufferLocation transfer_location{
-        .transfer_buffer = transfer_bufer,
+        .transfer_buffer = transfer_buffer,
         .offset = 0,
     };
 
-    SDL_GPUBufferRegion buffer_reigion{
-        .buffer = verticie_buffer,
-        .offset = 0,
-        .size = 36,
+    //info about the destination of the copy pass, which is the buffer we created
+    SDL_GPUBufferRegion copy_destination{
+        .buffer = vertex_buffer,
+        .offset = 0,// begin writing from the first vertex
+        .size = sizeof(vertices),
     };
 
-    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "upload transfer buffer");
-    SDL_GPUCommandBuffer* upload_cmd = SDL_AcquireGPUCommandBuffer(sdl_gpu_device);
-    SDL_GPUCopyPass* copy_pass = SDL_BeginGPUCopyPass(upload_cmd);
-    SDL_UploadToGPUBuffer(copy_pass, &transfer_location, 0, triangle_vertices);
-    SDL_EndGPUCopyPass(copy_pass);
-    SDL_SubmitGPUCommandBuffer(upload_cmd);
 
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Game loop begin");
 
     while(game_running){
-        
         SDL_GPUCommandBuffer* cmd = SDL_AcquireGPUCommandBuffer(sdl_gpu_device);
-        SDL_GPUTexture* swapchainTex;
-        SDL_WaitAndAcquireGPUSwapchainTexture(cmd, sdl_window, &swapchainTex, NULL, NULL);
-        if (swapchainTex) {
-            SDL_GPUColorTargetInfo colorTarget = { .texture = swapchainTex, .clear_color = {0, 0, 0, 1}, .load_op = SDL_GPU_LOADOP_CLEAR, .store_op = SDL_GPU_STOREOP_STORE };
-            SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmd, &colorTarget, 1, NULL);
-            
-            SDL_BindGPUGraphicsPipeline(renderPass, pipeline);
-            
-            SDL_GPUBufferBinding buffer_bind{
-                .buffer = verticie_buffer, 
-                .offset = 0 
-            };
+        
 
-            SDL_BindGPUVertexBuffers(renderPass, 0, &buffer_bind, 1);
+        //fill in the transfer buffer with verticies:
+        Vertex* data = (Vertex*)SDL_MapGPUTransferBuffer(sdl_gpu_device, transfer_buffer, false);
+        data[0] = vertices[0];
+        data[1] = vertices[1];
+        data[2] = vertices[2];
+        // SDL_memcpy(data, vertices, sizeof(vertices));//or do this, this copy the entire verticies array to the transfer
+        SDL_UnmapGPUTransferBuffer(sdl_gpu_device, transfer_buffer);//clean up
 
-            // Draw 3 vertices (1 triangle)
-            SDL_DrawGPUPrimitives(renderPass, 3, 1, 0, 0);
-            
-            SDL_EndGPURenderPass(renderPass);
-        }
+        //upload to copy pass
+        SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(cmd);
+        SDL_UploadToGPUBuffer(copyPass, &transfer_location, &copy_destination, true);
+        SDL_EndGPUCopyPass(copyPass);
+
+        
+        //prepare the render pass
+        SDL_GPUTexture* swapchainTexture;
+        Uint32 width, height;
+        SDL_WaitAndAcquireGPUSwapchainTexture(cmd, sdl_window, &swapchainTexture, &width, &height);
+        if(swapchainTexture == NULL){continue;}//can sometime false, for example: window minimized
+        gpu_color_target_info.texture = swapchainTexture;// window's swapchain texture
+
+        //pass info about drawing stuff onto screen
+        SDL_GPURenderPass* render_pass = SDL_BeginGPURenderPass(cmd, &gpu_color_target_info, 1, NULL);
+        SDL_BindGPUGraphicsPipeline(render_pass, graphics_pipeline);//bind the
+
+
+        //clean up after every draw
+        SDL_EndGPURenderPass(render_pass);
         SDL_SubmitGPUCommandBuffer(cmd);
-
-
         processSDLEvents();
     }
 
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Clean up instances");
-    SDL_ReleaseGPUGraphicsPipeline(sdl_gpu_device, pipeline);
+    SDL_ReleaseGPUGraphicsPipeline(sdl_gpu_device, graphics_pipeline);
+    SDL_ReleaseGPUBuffer(sdl_gpu_device, vertex_buffer);
+    SDL_ReleaseGPUTransferBuffer(sdl_gpu_device, transfer_buffer);
     SDL_DestroyWindow(sdl_window);
     SDL_Quit();
 
