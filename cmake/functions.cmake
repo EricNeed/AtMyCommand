@@ -6,6 +6,7 @@ function(compileShader SHADER_SOURCE OUTPUT_EXTENSION RENDER_STAGE ENTRY_FUNCTIO
     string(SUBSTRING ${RENDER_STAGE} 0 4 STAGE_SHORT)
     #the output file directory
     set(OUTPUT_FILE_DIR "${CMAKE_BINARY_DIR}\\shader\\${SOURCE_NAME}.${STAGE_SHORT}.${OUTPUT_EXTENSION}")
+    message("output dir is: ${OUTPUT_FILE_DIR}")
 
     #the command line function
     add_custom_command(

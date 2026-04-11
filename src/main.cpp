@@ -1,7 +1,7 @@
 #include<SDL3/SDL.h>
 #include"src/client/client_main.h"
 
-SDL_Window* sdl_window = SDL_CreateWindow("AtMyCommand", 960, 540, SDL_WINDOW_RESIZABLE);
+SDL_Window* sdl_window = SDL_CreateWindow("AtMyCommand", 960, 540, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALWAYS_ON_TOP);
 SDL_GPUDevice* sdl_gpu_device = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_DXIL, NULL, NULL);
 
 
@@ -42,6 +42,7 @@ int main(){
 
     //SHADER!!!!!!!:(
     //vertex shader:
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Loading game shaders");
     size_t vsh_size;
     Uint8 *vsh_code = (Uint8 *)SDL_LoadFile("shader/shader.vert.dxil", &vsh_size);
     SDL_GPUShaderCreateInfo vsh_info = {
@@ -74,9 +75,14 @@ int main(){
         .props = 0                           // 0 if no extensions
     };
     SDL_GPUShader* fsh_shader = SDL_CreateGPUShader(sdl_gpu_device, &fsh_info);
+    if(vsh_shader == nullptr || fsh_shader == nullptr){
+        SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Shader creation failed, %s", SDL_GetError());
+    }
 
 
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Creating game GPU pipeline");
     //vertex buffer discriptions
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "  - Registering vertex shader information");
     SDL_GPUVertexBufferDescription vertexBufferDesctiptions[1]{{
         .slot = 0,
         .pitch = sizeof(Vertex),
@@ -92,13 +98,14 @@ int main(){
             .offset = 0,
         },
         {//color r, g, b, a
-            .location = 0,
-            .buffer_slot = 1,
+            .location = 1,
+            .buffer_slot = 0,
             .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT4,
             .offset = sizeof(float) * 3,
         }
     };
     //color target discription
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "  - Registering pipeline color target discription");
     SDL_GPUColorTargetDescription colorTargetDescriptions[1]{{
         .format = SDL_GetGPUSwapchainTextureFormat(sdl_gpu_device, sdl_window),
         .blend_state = {
@@ -112,6 +119,7 @@ int main(){
         },
     }};
     //pipeline info
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "  - Registering pipeline information");
     SDL_GPUGraphicsPipelineCreateInfo pipeline_info{
         .vertex_shader = vsh_shader,
         .fragment_shader = fsh_shader,
@@ -127,11 +135,16 @@ int main(){
             .num_color_targets = 1,
         },
     };
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "  - Creating pipeline");
     SDL_GPUGraphicsPipeline* graphics_pipeline = SDL_CreateGPUGraphicsPipeline(sdl_gpu_device, &pipeline_info);
+    if(graphics_pipeline == nullptr){
+        SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "GPU pipeline creation failed, %s", SDL_GetError());
+    }
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "  - Release GPU shaders");
     SDL_ReleaseGPUShader(sdl_gpu_device, vsh_shader);//dont need shader no more after create pipeline
     SDL_ReleaseGPUShader(sdl_gpu_device, fsh_shader);
 
-
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Creating GPU buffer and trasfer buffer");
     //color target
     SDL_GPUColorTargetInfo gpu_color_target_info = {
         .clear_color = {1.0, 1.0, 1.0, 1.0},//what color to clear the screen to
@@ -150,7 +163,7 @@ int main(){
     //create a transfer buffer
     SDL_GPUTransferBufferCreateInfo transfer_buffer_info{
         .usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD, //this buffer transfer data to the gpu
-        .size = size_t(vertices),
+        .size = (uint32_t)size_t(vertices),
         .props = 0,
     };
     SDL_GPUTransferBuffer* transfer_buffer = SDL_CreateGPUTransferBuffer(sdl_gpu_device, &transfer_buffer_info);
@@ -198,7 +211,13 @@ int main(){
         //pass info about drawing stuff onto screen
         SDL_GPURenderPass* render_pass = SDL_BeginGPURenderPass(cmd, &gpu_color_target_info, 1, NULL);
         SDL_BindGPUGraphicsPipeline(render_pass, graphics_pipeline);//bind the
-
+        SDL_GPUBufferBinding bufferBindings[1]{{
+            .buffer = vertex_buffer,
+            .offset = 0,
+        }};
+        SDL_BindGPUVertexBuffers(render_pass, 0, bufferBindings, 1);
+        SDL_DrawGPUPrimitives(render_pass, 3, 1, 0, 0);
+        
 
         //clean up after every draw
         SDL_EndGPURenderPass(render_pass);

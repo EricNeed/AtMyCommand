@@ -20,5 +20,5 @@ target_link_libraries(AtMyCommand
 target_include_directories(AtMyCommand PRIVATE ${CMAKE_SOURCE_DIR})
 
 #shader compile
-# compileShader("${CMAKE_SOURCE_DIR}/src/shader/shader.hlsl" "dxil" "vertex" "mainVSH")
-# compileShader("${CMAKE_SOURCE_DIR}/src/shader/shader.hlsl" "dxil" "fragment" "mainFSH")
+compileShader("${CMAKE_SOURCE_DIR}/src/shader/shader.hlsl" "dxil" "vertex" "mainVSH")
+compileShader("${CMAKE_SOURCE_DIR}/src/shader/shader.hlsl" "dxil" "fragment" "mainFSH")
