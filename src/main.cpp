@@ -36,8 +36,7 @@ void processSDLEvents(){
 int main(){
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_AUDIO);
     SDL_SetLogPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
-    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Game is Running");
-    SDL_ClaimWindowForGPUDevice(sdl_gpu_device, sdl_window);
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "[Main]: Game is Running");
 
 
     //SHADER!!!!!!!:(

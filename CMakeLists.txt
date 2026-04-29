@@ -19,6 +19,18 @@ target_link_libraries(AtMyCommand
 
 target_include_directories(AtMyCommand PRIVATE ${CMAKE_SOURCE_DIR})
 
+#set output shader format here
+set(Shader_Format "dxil")
+
+#configure the setting inside of program
+if(${Shader_Format} STREQUAL "dxil") 
+target_compile_definitions(AtMyCommand PRIVATE CrossShaderFormat=SDL_GPU_SHADERFORMAT_DXIL)
+elseif(${Shader_Format} STREQUAL "spv")
+target_compile_definitions(AtMyCommand PRIVATE CrossShaderFormat=SDL_GPU_SHADERFORMAT_SPIRV)
+elseif(${Shader_Format} STREQUAL "metal")
+target_compile_definitions(AtMyCommand PRIVATE CrossShaderFormat=SDL_GPU_SHADERFORMAT_MSL)
+endif()
+
 #shader compile
-compileShader("${CMAKE_SOURCE_DIR}/src/shader/shader.hlsl" "dxil" "vertex" "mainVSH")
-compileShader("${CMAKE_SOURCE_DIR}/src/shader/shader.hlsl" "dxil" "fragment" "mainFSH")
+compileShader("${CMAKE_SOURCE_DIR}/src/shader/shader.hlsl" ${Shader_Format} "vertex" "mainVSH")
+compileShader("${CMAKE_SOURCE_DIR}/src/shader/shader.hlsl" ${Shader_Format} "fragment" "mainFSH") 
