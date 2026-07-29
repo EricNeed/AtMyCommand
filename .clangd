@@ -1,0 +1,8 @@
+CompileFlags:
+  Add: [-std=c++20, -xc++]
+  CompilationDatabase: "out/build/gcc"
+  Remove:
+    - "-fmodule-mapper=*"
+    - "-fdeps-format=*"
+    - "-fmodules-ts"
+  Compiler: clang++

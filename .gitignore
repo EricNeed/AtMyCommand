@@ -1,22 +1,12 @@
-
 # VS code
 .vscode/c_cpp_properties.json
 
 # cmake
-build/Makefile
-build/*.json
-build/*.cmake
-build/.cmake/
-build/CMakeFiles/
-build/CMakeCache.txt
+out/
 local_config.cmake
-
-# built files
-build/*.exe
 
 # libraries
 dependancies/
-build/Shader_Libs-prefix
 
 #files i don't want to throw away
 trash_bin/

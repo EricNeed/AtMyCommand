@@ -1,20 +1,13 @@
-#include<src/client/rendering/GPU_setup.h>
+module;
+#include <SDL3/SDL.h>
 
-const int hi = 20;
+export module Pipeline_A;
 
-SDLGPUSetup::SDLGPUSetup(){
-    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "[SDLGPUSetup::SDLGPUSetup]: Creating window");
-    sdl_window = SDL_CreateWindow("AtMyCommand", 960, 540, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALWAYS_ON_TOP);
-    gpu_device = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_DXIL, NULL, NULL);
-    SDL_ClaimWindowForGPUDevice(gpu_device, sdl_window);
-    int a = hi;
-}
-
-bool SDLGPUSetup::setupShaders(SDL_GPUShader* vert_shader, SDL_GPUShader* frag_shader){
+bool setupShaders(SDL_GPUShader*& vert_shader, SDL_GPUShader*& frag_shader, SDL_GPUDevice* gpu_device){
     //vertex shader:
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Loading game shaders");
     size_t vsh_size;
-    Uint8 *vsh_code = (Uint8 *)SDL_LoadFile("shader/shader.vert.dxil", &vsh_size);
+    Uint8 *vsh_code = (Uint8 *)SDL_LoadFile("shaders/shader.vert.dxil", &vsh_size);
     SDL_GPUShaderCreateInfo vsh_info = {
         .code_size = vsh_size,
         .code = vsh_code,
@@ -31,7 +24,7 @@ bool SDLGPUSetup::setupShaders(SDL_GPUShader* vert_shader, SDL_GPUShader* frag_s
 
     //fragment shader:
     size_t fsh_size;
-    Uint8 *fsh_code = (Uint8 *)SDL_LoadFile("Shader/shader.frag.dxil", &fsh_size);
+    Uint8 *fsh_code = (Uint8 *)SDL_LoadFile("shaders/shader.frag.dxil", &fsh_size);
     SDL_GPUShaderCreateInfo fsh_info = {
         .code_size = fsh_size,
         .code = fsh_code,
@@ -46,6 +39,7 @@ bool SDLGPUSetup::setupShaders(SDL_GPUShader* vert_shader, SDL_GPUShader* frag_s
     };
     frag_shader = SDL_CreateGPUShader(gpu_device, &fsh_info);
 
+
     if(vert_shader == nullptr || frag_shader == nullptr){
         SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Shader creation failed, %s", SDL_GetError());
         return false;
@@ -55,17 +49,17 @@ bool SDLGPUSetup::setupShaders(SDL_GPUShader* vert_shader, SDL_GPUShader* frag_s
 }
 
 
-bool SDLGPUSetup::setupPipeline(){
+export SDL_GPUGraphicsPipeline* setupPipelineA(SDL_GPUDevice* gpu_device, SDL_Window* sdl_window, Uint32 vertexSize){
     SDL_GPUShader *vert_shader;
     SDL_GPUShader *frag_shader;
-    setupShaders(vert_shader, frag_shader);
+    setupShaders(vert_shader, frag_shader, gpu_device);
 
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Creating game GPU pipeline");
     //vertex buffer discriptions
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "  - Registering vertex shader information");
     SDL_GPUVertexBufferDescription vertexBufferDesctiptions[1]{{
         .slot = 0,
-        .pitch = sizeof(SDL_Vertex),
+        .pitch = vertexSize,
         .input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX,
         .instance_step_rate = 0,
     }};
@@ -87,7 +81,7 @@ bool SDLGPUSetup::setupPipeline(){
     //color target discription
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "  - Registering pipeline color target discription");
     SDL_GPUColorTargetDescription colorTargetDescriptions[1]{{
-        .format = SDL_GetGPUSwapchainTextureFormat(sdl_gpu_device, sdl_window),
+        .format = SDL_GetGPUSwapchainTextureFormat(gpu_device, sdl_window),
         .blend_state = {
             .src_color_blendfactor = SDL_GPU_BLENDFACTOR_SRC_ALPHA,
             .dst_color_blendfactor = SDL_GPU_BLENDFACTOR_ONE_MINUS_SRC_ALPHA,
@@ -98,11 +92,13 @@ bool SDLGPUSetup::setupPipeline(){
             .enable_blend = true,
         },
     }};
+
     //pipeline info
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "  - Registering pipeline information");
+
     SDL_GPUGraphicsPipelineCreateInfo pipeline_info{
-        .vertex_shader = vsh_shader,
-        .fragment_shader = fsh_shader,
+        .vertex_shader = vert_shader,
+        .fragment_shader = frag_shader,
         .vertex_input_state = {
             .vertex_buffer_descriptions = vertexBufferDesctiptions,
             .num_vertex_buffers = 1,
@@ -116,11 +112,19 @@ bool SDLGPUSetup::setupPipeline(){
         },
     };
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "  - Creating pipeline");
-    SDL_GPUGraphicsPipeline* graphics_pipeline = SDL_CreateGPUGraphicsPipeline(sdl_gpu_device, &pipeline_info);
+    SDL_GPUGraphicsPipeline* graphics_pipeline = SDL_CreateGPUGraphicsPipeline(gpu_device, &pipeline_info);
+
     if(graphics_pipeline == nullptr){
         SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "GPU pipeline creation failed, %s", SDL_GetError());
     }
+
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "  - Release GPU shaders");
-    SDL_ReleaseGPUShader(sdl_gpu_device, vsh_shader);//dont need shader no more after create pipeline
-    SDL_ReleaseGPUShader(sdl_gpu_device, fsh_shader);
+    SDL_ReleaseGPUShader(gpu_device, vert_shader);//dont need shader no more after create pipeline
+    SDL_ReleaseGPUShader(gpu_device, frag_shader);
+
+    return graphics_pipeline;
 }
+
+export void cleanUpPipelineA(){
+
+}   
