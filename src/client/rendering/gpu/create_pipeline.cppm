@@ -1,33 +1,36 @@
 module;
+#include "SDL3/SDL_gpu.h"
 #include <SDL3/SDL.h>
 export module Create_New_Pipeline;
 
 
 import Pipeline_A;
-
+import Pipeline_Textures;
 
 export SDL_Window* sdl_window = SDL_CreateWindow("AtMyCommand", 960, 540, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALWAYS_ON_TOP);
 export SDL_GPUDevice* gpu_device = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_DXIL, true, NULL);
 
 
 // the vertex input layout, (0,0):center, (-1,-1)bottom left, (1, 1)top right
-struct Vertex
-{
-    float x, y, z;      //vec3 position
-    float r, g, b, a;   //vec4 color
-};
-// a list of vertices
-Vertex vertices[]
-{
-    {0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f},     // top vertex
-    {-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f},   // bottom left vertex
-    {0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f}     // bottom right vertex
-};
-// Vertex vertices[]{
-//     {0.5, 0.5, 0, 1.0, 0.0, 0.0, 1.0},     // top vertex
-//     {0.1, 0.1, 0.0, 1.0, 1.0, 0.0, 1.0},   // bottom left vertex
-//     {0, 0, 0.0, 1.0, 0.0, 1.0, 1.0}     // bottom right vertex
+// struct Vertex{
+//     float x, y, z;      //vec3 position
+//     Uint8 r, g, b, a;   //vec4 color
 // };
+// // a list of vertices
+// Vertex vertices[]{
+//     {0.0f, 0.5f, 0.0f, 255, 0, 0, 255},     // top vertex
+//     {-0.5f, -0.5f, 0.0f, 255, 255, 0, 255},   // bottom left vertex
+//     {0.5f, -0.5f, 0.0f, 255, 0, 255, 255}     // bottom right vertex
+// };
+
+
+struct RenderInfo{
+    float x, y, z, sizeX, sizeY; //z is the virtual height btw
+};
+RenderInfo testObj{
+    0,0,0, 0.5, 0.5
+};
+
 export namespace Pipelines{
     SDL_GPUGraphicsPipeline* pipelineA;
 }
@@ -37,11 +40,13 @@ SDL_GPUTransferBuffer* transfer_buffer;
 SDL_GPUTransferBufferLocation transfer_location;
 SDL_GPUBufferRegion copy_destination;
 SDL_GPUColorTargetInfo gpu_color_target_info;
+SDL_GPUSampler* textureSampler;
+
 
 export void setupPipelines(){
     SDL_ClaimWindowForGPUDevice(gpu_device, sdl_window);
 
-    Pipelines::pipelineA = setupPipelineA(gpu_device, sdl_window, (int)sizeof(Vertex));
+    Pipelines::pipelineA = setupPipelineA(gpu_device, sdl_window, (int)sizeof(RenderInfo));
 
     gpu_color_target_info = {
         .clear_color = {1.0f, 1.0f, 1.0f, 1.0f},//what color to clear the screen to
@@ -52,7 +57,7 @@ export void setupPipelines(){
     //create a buffer on the gpu
     SDL_GPUBufferCreateInfo vertex_buffer_info{
         .usage = SDL_GPU_BUFFERUSAGE_VERTEX,
-        .size = sizeof(vertices),//size of the buffer
+        .size = sizeof(testObj),//size of the buffer
         .props = 0,// propertie ID if need extension
     };
     vertex_buffer = SDL_CreateGPUBuffer(gpu_device, &vertex_buffer_info);//very expensive to create, reuse it
@@ -61,7 +66,7 @@ export void setupPipelines(){
     SDL_GPUTransferBufferCreateInfo transfer_buffer_info{
         .usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD, //this buffer transfer data to the gpu
         // .size = (uint32_t)size_t(vertices),
-        .size = sizeof(vertices),
+        .size = sizeof(testObj),
         .props = 0,
     };
     transfer_buffer = SDL_CreateGPUTransferBuffer(gpu_device, &transfer_buffer_info);
@@ -75,19 +80,41 @@ export void setupPipelines(){
     copy_destination = {
         .buffer = vertex_buffer,
         .offset = 0,// begin writing from the first vertex
-        .size = sizeof(vertices),
+        .size = sizeof(testObj),
     };
+
+
+    SDL_GPUSamplerCreateInfo textureSamplerInfo{
+        .min_filter = SDL_GPU_FILTER_NEAREST,
+        .mag_filter = SDL_GPU_FILTER_NEAREST,
+        .address_mode_u = SDL_GPU_SAMPLERADDRESSMODE_CLAMP_TO_EDGE,
+        .address_mode_v = SDL_GPU_SAMPLERADDRESSMODE_CLAMP_TO_EDGE,
+    };
+    textureSampler = SDL_CreateGPUSampler(gpu_device, &textureSamplerInfo);
+
+
+    //test pass that uploads some stuff
+    SDL_GPUCommandBuffer* cmd = SDL_AcquireGPUCommandBuffer(gpu_device);
+    SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(cmd);
+    
+    addGPUTextures(copyPass, gpu_device);
+
+    SDL_EndGPUCopyPass(copyPass); 
+    SDL_SubmitGPUCommandBuffer(cmd);
+
+
 }
+
+
 
 export void drawFrame(){
     SDL_GPUCommandBuffer* cmd = SDL_AcquireGPUCommandBuffer(gpu_device);
     
 
     //fill in the transfer buffer with verticies:
-    Vertex* data = (Vertex*)SDL_MapGPUTransferBuffer(gpu_device, transfer_buffer, false);
-    data[0] = vertices[0];
-    data[1] = vertices[1];
-    data[2] = vertices[2];
+    RenderInfo* data = (RenderInfo*)SDL_MapGPUTransferBuffer(gpu_device, transfer_buffer, false);
+    data[0] = testObj;
+    
     // SDL_memcpy(data, vertices, sizeof(vertices));//or do this, this copy the entire verticies array to the transfer
     SDL_UnmapGPUTransferBuffer(gpu_device, transfer_buffer);//clean up
 
@@ -110,13 +137,22 @@ export void drawFrame(){
         .buffer = vertex_buffer,
         .offset = 0,
     }};
+
+    SDL_GPUTextureSamplerBinding binding{
+        .texture = testTexture,
+        .sampler = textureSampler
+    };
+    SDL_BindGPUFragmentSamplers(render_pass, 0, &binding, 1);
+
     SDL_BindGPUVertexBuffers(render_pass, 0, bufferBindings, 1);
-    SDL_DrawGPUPrimitives(render_pass, 3, 1, 0, 0);
-    
+    SDL_DrawGPUPrimitives(render_pass, 6, 1, 0, 0);
+
 
     //clean up after every draw
     SDL_EndGPURenderPass(render_pass);
     SDL_SubmitGPUCommandBuffer(cmd);
+
 }
+
 
 //--experimental-modules-support

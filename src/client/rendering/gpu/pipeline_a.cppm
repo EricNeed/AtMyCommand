@@ -1,4 +1,5 @@
 module;
+#include "SDL3/SDL_gpu.h"
 #include <SDL3/SDL.h>
 
 export module Pipeline_A;
@@ -31,7 +32,7 @@ bool setupShaders(SDL_GPUShader*& vert_shader, SDL_GPUShader*& frag_shader, SDL_
         .entrypoint = "mainFSH",              // entry‑point name
         .format = SDL_GPU_SHADERFORMAT_DXIL,  // DXIL on D3D12
         .stage = SDL_GPU_SHADERSTAGE_FRAGMENT,  // shader stage
-        .num_samplers = 0,                    // number of SamplerState in your shader
+        .num_samplers = 1,                    // number of SamplerState in your shader
         .num_storage_textures = 0,           // UAVs bound as textures
         .num_storage_buffers = 0,            // UAVs bound as buffers
         .num_uniform_buffers = 0,            // cbuffer / uniform buffer slots used
@@ -50,6 +51,7 @@ bool setupShaders(SDL_GPUShader*& vert_shader, SDL_GPUShader*& frag_shader, SDL_
 
 
 export SDL_GPUGraphicsPipeline* setupPipelineA(SDL_GPUDevice* gpu_device, SDL_Window* sdl_window, Uint32 vertexSize){
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "vertex size %d", vertexSize);
     SDL_GPUShader *vert_shader;
     SDL_GPUShader *frag_shader;
     setupShaders(vert_shader, frag_shader, gpu_device);
@@ -57,7 +59,7 @@ export SDL_GPUGraphicsPipeline* setupPipelineA(SDL_GPUDevice* gpu_device, SDL_Wi
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Creating game GPU pipeline");
     //vertex buffer discriptions
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "  - Registering vertex shader information");
-    SDL_GPUVertexBufferDescription vertexBufferDesctiptions[1]{{
+    SDL_GPUVertexBufferDescription vertexBufferDesctiptions[1]{{// the buffer all the data will be send into
         .slot = 0,
         .pitch = vertexSize,
         .input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX,
@@ -71,10 +73,10 @@ export SDL_GPUGraphicsPipeline* setupPipelineA(SDL_GPUDevice* gpu_device, SDL_Wi
             .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3,
             .offset = 0,
         },
-        {//color r, g, b, a
+        {//size x and y
             .location = 1,
             .buffer_slot = 0,
-            .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT4,
+            .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2,
             .offset = sizeof(float) * 3,
         }
     };
@@ -89,10 +91,13 @@ export SDL_GPUGraphicsPipeline* setupPipelineA(SDL_GPUDevice* gpu_device, SDL_Wi
             .src_alpha_blendfactor = SDL_GPU_BLENDFACTOR_SRC_ALPHA,
             .dst_alpha_blendfactor = SDL_GPU_BLENDFACTOR_ONE_MINUS_SRC_ALPHA,
             .alpha_blend_op = SDL_GPU_BLENDOP_ADD,
-            .enable_blend = true,
+            .color_write_mask = SDL_GPU_COLORCOMPONENT_R | 
+                            SDL_GPU_COLORCOMPONENT_G | 
+                            SDL_GPU_COLORCOMPONENT_B | 
+                            SDL_GPU_COLORCOMPONENT_A, // <-- REQUIRED
+            .enable_blend = false,
         },
     }};
-
     //pipeline info
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "  - Registering pipeline information");
 

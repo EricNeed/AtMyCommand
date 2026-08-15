@@ -12,5 +12,7 @@ target_sources(AtMyCommand
             src/client/rendering/gpu/pipeline_a.cppm
             src/client/rendering/render_game.cppm
             src/client/tick_client.cppm
+            src/client/rendering/gpu/helper_functions/test_shapes.cppm
+            src/client/rendering/gpu/helper_functions/upload_textures.cppm
 
 )
