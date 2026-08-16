@@ -75,11 +75,12 @@ PixelData mainVSH(VSInput input, uint vertexID:SV_VertexID){
 
 //************************************************************fragment
 
-Texture2DArray gTextureArray : register(t0);
-SamplerState gSampler        : register(s0);
+Texture2DArray<float4> gTextureArray : register(t0, space2);
+SamplerState gSampler : register(s0, space2);
 
 float4 mainFSH(PixelData input) : SV_TARGET{
     float4 color = gTextureArray.Sample(gSampler, input.uvw);
 
     return color;
+    // return float4(1, 0, 0, 1);
 }

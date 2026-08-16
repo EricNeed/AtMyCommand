@@ -1,3 +1,4 @@
+#include "SDL3/SDL_log.h"
 #include <SDL3/SDL.h>
 
 import Tick_Client;
@@ -20,6 +21,7 @@ void processSDLEvents(){
 int main(){
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_AUDIO);
     SDL_SetLogPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG);
+    SDL_SetLogPriority(SDL_LOG_CATEGORY_RENDER, SDL_LOG_PRIORITY_DEBUG);
 
     setupClient();
 

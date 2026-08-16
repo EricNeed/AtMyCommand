@@ -6,3 +6,5 @@ CompileFlags:
     - "-fdeps-format=*"
     - "-fmodules-ts"
   Compiler: clang++
+Diagnostics:
+  UnusedIncludes: Strict

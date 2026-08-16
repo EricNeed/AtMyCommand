@@ -1,5 +1,5 @@
 module;
-#include "SDL3/SDL_gpu.h"
+#include "SDL3/SDL_log.h"
 #include <SDL3/SDL.h>
 export module Create_New_Pipeline;
 
@@ -92,17 +92,18 @@ export void setupPipelines(){
     };
     textureSampler = SDL_CreateGPUSampler(gpu_device, &textureSamplerInfo);
 
-
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Uploading resources to GPU");
     //test pass that uploads some stuff
     SDL_GPUCommandBuffer* cmd = SDL_AcquireGPUCommandBuffer(gpu_device);
     SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(cmd);
     
     addGPUTextures(copyPass, gpu_device);
-
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - 7");
     SDL_EndGPUCopyPass(copyPass); 
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - 8");
     SDL_SubmitGPUCommandBuffer(cmd);
 
-
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "GPU Rendering preperation is complete");
 }
 
 

@@ -1,5 +1,7 @@
 module;
 #include "SDL3/SDL.h"
+#include "SDL3/SDL_gpu.h"
+#include "SDL3/SDL_log.h"
 
 export module Pipeline_Textures;
 import Test_Shapes;
@@ -15,6 +17,7 @@ export SDL_GPUTexture* testTexture;
 * \param layerCount should be 1 if not 2d array
 */
 SDL_GPUTexture* getTexture(SDL_GPUDevice* gpu_device, SDL_GPUCopyPass* copyPass, Uint32 width, Uint32 height, Uint32 layerCount, Uint32 offset){
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - registering texture info");
     SDL_GPUTextureCreateInfo textureInfo{
         .type = (layerCount>1)? SDL_GPU_TEXTURETYPE_2D_ARRAY:SDL_GPU_TEXTURETYPE_2D,
         .format = SDL_GPU_TEXTUREFORMAT_B8G8R8A8_UNORM,
@@ -28,6 +31,10 @@ SDL_GPUTexture* getTexture(SDL_GPUDevice* gpu_device, SDL_GPUCopyPass* copyPass,
     };
     SDL_GPUTexture* texture = SDL_CreateGPUTexture(gpu_device, &textureInfo);
 
+    if(texture == nullptr){
+        SDL_LogError(SDL_LOG_CATEGORY_RENDER, "texture register creation failed");
+    }
+
     SDL_GPUTextureTransferInfo textureTransferInfo{
         .transfer_buffer = transferBuffer,
         .offset = offset,
@@ -35,27 +42,29 @@ SDL_GPUTexture* getTexture(SDL_GPUDevice* gpu_device, SDL_GPUCopyPass* copyPass,
     
     SDL_GPUTextureRegion destination{
         .texture = texture,
-        .layer = layerCount,
+        .layer = 0, // the first layer to transfer
         .w = width,
         .h = height,
-        .d = 1
+        .d = layerCount // number of layer to to transfer
     };
 
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - uploading texture info");
     SDL_UploadToGPUTexture(copyPass, &textureTransferInfo, &destination, false);
-
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - 6");
     return texture;
 }
 
 
 //this function should only call during copy pass
 export void addGPUTextures(SDL_GPUCopyPass* copyPass, SDL_GPUDevice* gpu_device){
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - Creating texture transfer buffer");
     SDL_GPUTransferBufferCreateInfo transferBufferInfo{
         .usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
         .size = sizeof(testCube) // replace this with a loop that check through all the textures
     };
     transferBuffer = SDL_CreateGPUTransferBuffer(gpu_device, &transferBufferInfo);
 
-
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - transfering texture data");
     SDL_Color* transferSession =  (SDL_Color*)SDL_MapGPUTransferBuffer(gpu_device, transferBuffer, false);
 
     SDL_memcpy(transferSession, testCube, sizeof(testCube));//for loop as well
@@ -64,6 +73,7 @@ export void addGPUTextures(SDL_GPUCopyPass* copyPass, SDL_GPUDevice* gpu_device)
     SDL_ReleaseGPUTransferBuffer(gpu_device, transferBuffer);
 
     
+    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - bind data to texture");
     //upload texture info now
     testTexture = getTexture(gpu_device, copyPass, atlasSize.x, atlasSize.y, zLayerCount, 0);//also replace witjh loop
     return;
