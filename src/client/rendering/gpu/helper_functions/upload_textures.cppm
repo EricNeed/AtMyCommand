@@ -1,7 +1,5 @@
 module;
 #include "SDL3/SDL.h"
-#include "SDL3/SDL_gpu.h"
-#include "SDL3/SDL_log.h"
 
 export module Pipeline_Textures;
 import Test_Shapes;
@@ -16,11 +14,11 @@ export SDL_GPUTexture* testTexture;
 * this function is just for 2d texture and voxel slices. 
 * \param layerCount should be 1 if not 2d array
 */
-SDL_GPUTexture* getTexture(SDL_GPUDevice* gpu_device, SDL_GPUCopyPass* copyPass, Uint32 width, Uint32 height, Uint32 layerCount, Uint32 offset){
+SDL_GPUTexture* uploadTexture(SDL_GPUDevice* gpu_device, SDL_GPUCopyPass* copyPass, Uint32 width, Uint32 height, Uint32 layerCount, Uint32 offset){
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - registering texture info");
     SDL_GPUTextureCreateInfo textureInfo{
         .type = (layerCount>1)? SDL_GPU_TEXTURETYPE_2D_ARRAY:SDL_GPU_TEXTURETYPE_2D,
-        .format = SDL_GPU_TEXTUREFORMAT_B8G8R8A8_UNORM,
+        .format = SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM,
         .usage = SDL_GPU_TEXTUREUSAGE_SAMPLER,
         .width = width,
         .height = height,
@@ -45,12 +43,11 @@ SDL_GPUTexture* getTexture(SDL_GPUDevice* gpu_device, SDL_GPUCopyPass* copyPass,
         .layer = 0, // the first layer to transfer
         .w = width,
         .h = height,
-        .d = layerCount // number of layer to to transfer
+        .d = 1 // can only be 1 except 3D texture
     };
 
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - uploading texture info");
     SDL_UploadToGPUTexture(copyPass, &textureTransferInfo, &destination, false);
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - 6");
     return texture;
 }
 
@@ -75,6 +72,6 @@ export void addGPUTextures(SDL_GPUCopyPass* copyPass, SDL_GPUDevice* gpu_device)
     
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - bind data to texture");
     //upload texture info now
-    testTexture = getTexture(gpu_device, copyPass, atlasSize.x, atlasSize.y, zLayerCount, 0);//also replace witjh loop
+    testTexture = uploadTexture(gpu_device, copyPass, atlasSize.x, atlasSize.y, zLayerCount, 0);
     return;
 }

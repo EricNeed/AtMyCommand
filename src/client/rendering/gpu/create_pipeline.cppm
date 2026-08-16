@@ -97,10 +97,11 @@ export void setupPipelines(){
     SDL_GPUCommandBuffer* cmd = SDL_AcquireGPUCommandBuffer(gpu_device);
     SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(cmd);
     
+    
     addGPUTextures(copyPass, gpu_device);
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - 7");
-    SDL_EndGPUCopyPass(copyPass); 
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "  - 8");
+
+
+    SDL_EndGPUCopyPass(copyPass);
     SDL_SubmitGPUCommandBuffer(cmd);
 
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "GPU Rendering preperation is complete");
